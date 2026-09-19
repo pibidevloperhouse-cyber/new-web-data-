@@ -1,0 +1,821 @@
+   <!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PIBI AI Data — Turn Raw Data Into AI-Ready Intelligence</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --void:#ffffff;
+  --panel:#f2faf6;
+  --panel-2:#eaf6ef;
+  --line:#dcefe3;
+  --line-bright:#a9dfc4;
+  --text:#123b2f;
+  --muted:#5a7d70;
+  --dim:#9bbcae;
+  --amber:#38bdf8;
+  --amber-dim:#38bdf81c;
+  --cyan:#2dd4a7;
+  --cyan-dim:#2dd4a71c;
+  --violet:#60a5fa;
+  --violet-dim:#60a5fa1c;
+  --red:#ef4444;
+  --navy:#123b2f;
+  --radius:2px;
+  --display:'Space Grotesk',sans-serif;
+  --body:'IBM Plex Sans',sans-serif;
+  --mono:'IBM Plex Mono',monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+@media (prefers-reduced-motion: reduce){
+  html{scroll-behavior:auto;}
+  *{animation-duration:0.001s !important; animation-iteration-count:1 !important; transition-duration:0.001s !important;}
+}
+body{
+  background:var(--void);
+  color:var(--text);
+  font-family:var(--body);
+  line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+  overflow-x:hidden;
+}
+.bg-grid{
+  position:fixed; inset:0; z-index:0; pointer-events:none;
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size:64px 64px;
+  opacity:0.6;
+  mask-image:radial-gradient(ellipse 80% 60% at 50% 0%, black 40%, transparent 100%);
+}
+a{color:inherit; text-decoration:none;}
+:focus-visible{outline:2px solid var(--amber); outline-offset:2px;}
+.wrap{max-width:1180px; margin:0 auto; padding:0 28px; position:relative; z-index:1;}
+.eyebrow{
+  font-family:var(--mono); font-size:12px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--amber); display:flex; align-items:center; gap:10px;
+}
+.eyebrow::before{content:''; width:7px; height:7px; background:var(--amber); border-radius:50%; box-shadow:0 0 8px var(--amber);}
+h1,h2,h3,h4{font-family:var(--display); font-weight:600; letter-spacing:-.01em; line-height:1.08;}
+.mono{font-family:var(--mono);}
+::selection{background:var(--amber-dim); color:var(--amber);}
+
+/* ---------- NAV ---------- */
+header{
+  position:fixed; top:0; left:0; right:0; z-index:100;
+  background:rgba(255,255,255,.85); backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+}
+.nav{display:flex; align-items:center; justify-content:space-between; padding:16px 28px; max-width:1180px; margin:0 auto;}
+.logo{display:flex; align-items:center; gap:10px; font-family:var(--display); font-weight:700; font-size:18px; letter-spacing:-.01em;}
+.logo .mark{width:22px; height:22px; position:relative; flex-shrink:0;}
+.logo .mark svg{width:100%; height:100%;}
+.nav-links{display:flex; gap:28px; font-size:14px; color:var(--muted);}
+.nav-links a{transition:color .2s;}
+.nav-links a:hover{color:var(--text);}
+.nav-cta{
+  font-family:var(--mono); font-size:12px; letter-spacing:.04em; text-transform:uppercase;
+  border:1px solid var(--line-bright); padding:9px 16px; border-radius:var(--radius);
+  transition:all .2s; white-space:nowrap;
+}
+.nav-cta:hover{border-color:var(--amber); color:var(--amber);}
+.nav-toggle{display:none; flex-direction:column; gap:4px; background:none; border:none; cursor:pointer; padding:6px;}
+.nav-toggle span{width:20px; height:2px; background:var(--text);}
+
+/* ---------- HERO ---------- */
+.hero{
+  padding:168px 0 90px; position:relative; overflow:hidden;
+}
+.hero-grid{display:grid; grid-template-columns:1.05fr .95fr; gap:56px; align-items:center;}
+.hero h1{font-size:clamp(32px,4.2vw,54px); margin:18px 0 20px;}
+.hero h1 .accent{color:var(--amber);}
+.hero p.lede{font-size:17px; color:var(--muted); max-width:520px; margin-bottom:34px;}
+.cta-row{display:flex; gap:14px; flex-wrap:wrap; margin-bottom:44px;}
+.btn{
+  font-family:var(--mono); font-size:13px; letter-spacing:.03em; padding:13px 22px;
+  border-radius:var(--radius); transition:all .2s; display:inline-flex; align-items:center; gap:8px;
+}
+.btn-primary{background:var(--amber); color:#ffffff; font-weight:600;}
+.btn-primary:hover{background:#1a46b8; transform:translateY(-1px);}
+.btn-ghost{border:1px solid var(--line-bright); color:var(--text);}
+.btn-ghost:hover{border-color:var(--cyan); color:var(--cyan);}
+.hero-stats{display:flex; gap:36px; flex-wrap:wrap;}
+.hero-stats .stat-num{font-family:var(--mono); font-size:24px; color:var(--text); font-weight:600;}
+.hero-stats .stat-label{font-size:12px; color:var(--dim); margin-top:2px;}
+
+/* SIGNATURE LOOP DIAGRAM */
+.loop-wrap{position:relative; aspect-ratio:1/1;}
+.loop-wrap svg{width:100%; height:100%; overflow:visible;}
+.loop-track{fill:none; stroke:var(--line-bright); stroke-width:1.5;}
+.loop-pulse{fill:none; stroke:var(--amber); stroke-width:2.5; filter:drop-shadow(0 0 6px var(--amber));
+  stroke-dasharray:36 2000; stroke-linecap:round;
+  animation:loopmove 14s linear infinite;}
+@keyframes loopmove{to{stroke-dashoffset:-2036;}}
+.loop-node{fill:var(--panel); stroke:var(--line-bright); stroke-width:1.5;}
+.loop-node-label{font-family:var(--mono); font-size:9px; fill:var(--muted); text-transform:uppercase; letter-spacing:.03em;}
+.loop-center-label{font-family:var(--mono); font-size:10px; fill:var(--dim); text-transform:uppercase; letter-spacing:.12em;}
+.loop-center-title{font-family:var(--display); font-size:16px; fill:var(--text); font-weight:600;}
+
+/* ---------- TICKER ---------- */
+.ticker-band{border-top:1px solid var(--line); border-bottom:1px solid var(--line); background:var(--panel); overflow:hidden; padding:16px 0;}
+.ticker-track{display:flex; gap:52px; white-space:nowrap; animation:ticker 30s linear infinite; width:max-content;}
+@keyframes ticker{from{transform:translateX(0);} to{transform:translateX(-50%);}}
+.ticker-track span{font-family:var(--mono); font-size:13px; color:var(--dim); letter-spacing:.04em;}
+.ticker-track span b{color:var(--muted); font-weight:500;}
+
+/* ---------- SECTION SHELL ---------- */
+section{padding:110px 0; position:relative; border-bottom:1px solid var(--line);}
+.section-head{max-width:640px; margin-bottom:56px;}
+.section-head h2{font-size:clamp(26px,3vw,38px); margin-top:16px;}
+.section-head p{color:var(--muted); font-size:15.5px; margin-top:14px; line-height:1.65;}
+.section-head.center{max-width:640px; margin-left:auto; margin-right:auto; text-align:center;}
+.section-head.center .eyebrow{justify-content:center;}
+
+/* ---------- LIFECYCLE / LOOP SECTION ---------- */
+.phase-rail{display:flex; flex-direction:column; border:1px solid var(--line); border-radius:var(--radius); overflow:hidden;}
+.phase-row{
+  display:grid; grid-template-columns:64px 1fr 1.4fr; gap:24px; padding:22px 26px;
+  border-bottom:1px solid var(--line); align-items:start; transition:background .2s;
+  position:relative;
+}
+.phase-row:last-child{border-bottom:none;}
+.phase-row:hover{background:var(--panel);}
+.phase-row .pn{font-family:var(--mono); color:var(--dim); font-size:13px; padding-top:2px;}
+.phase-row h4{font-size:16px; font-weight:600; color:var(--text);}
+.phase-row .pdesc{color:var(--muted); font-size:14px;}
+.phase-row .ptag{
+  display:inline-block; margin-top:8px; font-family:var(--mono); font-size:10.5px; letter-spacing:.06em;
+  color:var(--cyan); text-transform:uppercase;
+}
+.loop-back{
+  display:flex; align-items:center; gap:12px; padding:18px 26px; background:var(--panel-2);
+  font-family:var(--mono); font-size:12px; color:var(--amber); letter-spacing:.04em;
+}
+.loop-back svg{width:14px;height:14px;flex-shrink:0;}
+
+/* ---------- CARD GRID (services / modalities / industries) ---------- */
+.svc-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(270px,1fr)); gap:1px; background:var(--line); border:1px solid var(--line);}
+.svc-card{background:var(--void); padding:30px 26px; transition:background .25s;}
+.svc-card:hover{background:var(--panel);}
+.svc-num{font-family:var(--mono); font-size:11px; color:var(--dim);}
+.svc-card h3{font-size:17px; margin:14px 0 10px;}
+.svc-card p{font-size:13.5px; color:var(--muted); line-height:1.6;}
+.svc-dot{width:8px; height:8px; border-radius:50%; margin-bottom:16px;}
+
+/* ---------- CHAIN DIAGRAM ---------- */
+.chain{display:flex; flex-wrap:wrap; align-items:center; gap:0; font-family:var(--mono); font-size:12.5px;}
+.chain .link{
+  border:1px solid var(--line-bright); background:var(--panel); padding:9px 14px; border-radius:var(--radius);
+  color:var(--text); white-space:nowrap; margin-bottom:10px;
+}
+.chain .link.emphasis{border-color:var(--amber); color:var(--amber); background:var(--amber-dim);}
+.chain .arrow{color:var(--dim); padding:0 10px; margin-bottom:10px;}
+
+/* ---------- FEATURE PANEL (AI/GenAI, Automotive, Robotics) ---------- */
+.feature-panel{display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:start;}
+.feature-panel .fp-text p{color:var(--muted); font-size:15px; margin-top:14px; line-height:1.7;}
+.fp-tags{display:flex; flex-wrap:wrap; gap:9px; margin-top:26px;}
+.fp-tags span{
+  font-family:var(--mono); font-size:12px; padding:8px 13px; border:1px solid var(--line); border-radius:var(--radius);
+  color:var(--muted); background:var(--panel);
+}
+.fp-visual{border:1px solid var(--line-bright); border-radius:6px; background:linear-gradient(180deg,var(--panel),var(--void)); padding:30px; min-height:280px; display:flex; align-items:center; justify-content:center;}
+.fp-visual svg{width:100%; height:auto; max-width:380px;}
+.fp-note{font-size:12.5px; color:var(--dim); margin-top:20px; font-family:var(--mono);}
+
+/* ---------- HITL FLOW ---------- */
+.hitl-wrap{display:grid; grid-template-columns:.9fr 1.1fr; gap:56px; align-items:center;}
+.hitl-flow{display:flex; flex-direction:column; align-items:stretch; gap:0;}
+.hitl-step{
+  border:1px solid var(--line-bright); background:var(--panel); border-radius:var(--radius);
+  padding:16px 20px; display:flex; align-items:center; gap:14px; font-family:var(--mono); font-size:13px; color:var(--text);
+}
+.hitl-step .hs-dot{width:9px;height:9px;border-radius:50%; flex-shrink:0;}
+.hitl-arrow-down{display:flex; justify-content:center; padding:6px 0; color:var(--dim);}
+.hitl-arrow-down svg{width:14px;height:14px;}
+.hitl-step.final{border-color:var(--amber); background:var(--amber-dim); color:var(--amber); font-weight:600;}
+
+/* ---------- CONTROL CENTER ---------- */
+.cc-panel{
+  border:1px solid var(--line-bright); border-radius:6px; background:linear-gradient(180deg,var(--panel),var(--void));
+  overflow:hidden;
+}
+.cc-header{display:flex; align-items:center; justify-content:space-between; padding:16px 22px; border-bottom:1px solid var(--line);}
+.cc-header .dots{display:flex; gap:6px;}
+.cc-header .dots span{width:9px; height:9px; border-radius:50%; background:var(--line-bright);}
+.cc-title{font-family:var(--mono); font-size:12px; letter-spacing:.08em; color:var(--muted); text-transform:uppercase;}
+.cc-body{display:grid; grid-template-columns:1.1fr 1fr; gap:0;}
+.cc-metrics{padding:26px; border-right:1px solid var(--line);}
+.metric-row{margin-bottom:20px;}
+.metric-top{display:flex; justify-content:space-between; font-family:var(--mono); font-size:12.5px; color:var(--muted); margin-bottom:8px;}
+.metric-top b{color:var(--text); font-size:14px;}
+.bar-track{height:5px; background:var(--line); border-radius:3px; overflow:hidden;}
+.bar-fill{height:100%; border-radius:3px; width:0; transition:width 1.4s cubic-bezier(.16,1,.3,1);}
+.cc-side{padding:26px; display:flex; flex-direction:column; gap:14px;}
+.cc-stat{display:flex; justify-content:space-between; font-family:var(--mono); font-size:12.5px; color:var(--muted); padding-bottom:12px; border-bottom:1px dashed var(--line);}
+.cc-stat b{color:var(--text); font-size:15px;}
+.cc-insights{padding:22px 26px; border-top:1px solid var(--line); display:flex; flex-direction:column; gap:12px;}
+.insight{display:flex; gap:12px; font-size:13.5px; align-items:flex-start;}
+.insight .ic{font-family:var(--mono); font-size:13px; flex-shrink:0; margin-top:1px;}
+.insight span{color:var(--muted);}
+.insight b{color:var(--text); font-weight:500;}
+.cc-footnote{font-family:var(--mono); font-size:11.5px; color:var(--dim); margin-top:16px;}
+
+/* ---------- WHY IT MATTERS ---------- */
+.why-wrap{display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:center;}
+.why-wrap .why-text p{color:var(--muted); font-size:15.5px; margin-top:16px; line-height:1.75;}
+.why-wrap .why-text p strong{color:var(--text); font-weight:600;}
+
+/* ---------- TOOLS ---------- */
+.stack-groups{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:34px;}
+.stack-group .sg-label{font-family:var(--mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--amber); margin-bottom:14px;}
+.stack-group .sg-items{display:flex; flex-wrap:wrap; gap:8px;}
+.sg-items span{
+  font-family:var(--mono); font-size:12px; padding:6px 11px; border:1px solid var(--line); border-radius:var(--radius); color:var(--muted);
+}
+
+/* ---------- FINAL CTA ---------- */
+.final-cta{text-align:center; padding:130px 0; border-bottom:none;}
+.final-cta h2{font-size:clamp(28px,4vw,44px); max-width:760px; margin:20px auto 30px;}
+.final-cta p{color:var(--muted); max-width:520px; margin:0 auto 40px;}
+
+footer{padding:40px 0 60px;}
+.foot-row{display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:20px;}
+.foot-row .mono{font-size:11.5px; color:var(--dim);}
+.foot-links{display:flex; gap:24px; font-size:13px; color:var(--muted); flex-wrap:wrap;}
+
+@media(max-width:860px){
+  .hero-grid{grid-template-columns:1fr;}
+  .loop-wrap{max-width:420px; margin:0 auto;}
+  .nav-links{display:none;}
+  .nav-toggle{display:flex;}
+  .cc-body{grid-template-columns:1fr;}
+  .cc-metrics{border-right:none; border-bottom:1px solid var(--line);}
+  .feature-panel{grid-template-columns:1fr;}
+  .hitl-wrap{grid-template-columns:1fr;}
+  .why-wrap{grid-template-columns:1fr;}
+  .phase-row{grid-template-columns:40px 1fr; }
+  .phase-row .pdesc{grid-column:1/-1; padding-left:0;}
+}
+</style>
+</head>
+<body>
+
+
+
+<header>
+  <div class="nav">
+    <div class="logo">
+      <span class="mark">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="1" fill="none" stroke="#0ea5e9" stroke-width="1.6"/><circle cx="12" cy="12" r="2.4" fill="#0ea5e9"/><path d="M3 3 L7 3 M3 3 L3 7 M21 3 L17 3 M21 3 L21 7 M3 21 L7 21 M3 21 L3 17 M21 21 L17 21 M21 21 L21 17" stroke="#0ea5e9" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </span>
+      PIBI <span style="color:var(--dim); font-weight:500;">AI Data</span>
+    </div>
+    <nav class="nav-links">
+      <a href="#lifecycle">Data Lifecycle</a>
+      <a href="#services">Services</a>
+      <a href="#modalities">Data Types</a>
+      <a href="#genai">AI &amp; GenAI</a>
+      <a href="#automotive">Automotive</a>
+      <a href="#robotics">Robotics</a>
+      <a href="#quality">Quality</a>
+      <a href="#tools">Tools</a>
+    </nav>
+    <a href="#contact" class="nav-cta">Build Your Dataset</a>
+    <button class="nav-toggle" aria-label="menu"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<!-- HERO -->
+<section class="hero" style="border-bottom:1px solid var(--line);">
+  <div class="wrap hero-grid">
+    <div>
+      <div class="eyebrow">Data Collection · Annotation · Validation · AI Training Data</div>
+      <h1>Turn raw data into <span class="accent">AI-ready intelligence.</span></h1>
+      <p class="lede">From images, video and text to audio, documents, 3D and sensor data — we collect, annotate, validate and prepare high-quality datasets that help AI models learn, evaluate and improve.</p>
+      <div class="cta-row">
+        <a href="#contact" class="btn btn-primary">Talk to Our AI Data Team →</a>
+        <a href="#lifecycle" class="btn btn-ghost">Explore the Data Lifecycle</a>
+      </div>
+      <div class="hero-stats">
+        <div><div class="stat-num">9</div><div class="stat-label">Lifecycle phases</div></div>
+        <div><div class="stat-num">8+</div><div class="stat-label">Data modalities</div></div>
+        <div><div class="stat-num">HITL</div><div class="stat-label">Human-reviewed quality</div></div>
+      </div>
+    </div>
+
+    <div class="loop-wrap">
+      <svg viewBox="0 0 400 400">
+        <circle class="loop-track" cx="200" cy="200" r="164"/>
+        <circle class="loop-pulse" cx="200" cy="200" r="164" transform="rotate(-90 200 200)"/>
+        <text x="200" y="192" text-anchor="middle" class="loop-center-label">END-TO-END</text>
+        <text x="200" y="212" text-anchor="middle" class="loop-center-title">AI Data Loop</text>
+
+        <!-- nodes around the circle -->
+        <g id="loop-nodes"></g>
+      </svg>
+    </div>
+  </div>
+</section>
+
+<div class="ticker-band">
+  <div class="wrap" style="padding:0;">
+    <div class="ticker-track" id="ticker"></div>
+  </div>
+</div>
+
+<!-- LIFECYCLE -->
+<section id="lifecycle">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Phase 01 → Phase 09 → Phase 01</div>
+      <h2>Raw data, managed end-to-end.</h2>
+      <p>Data annotation isn't a single task — it's a lifecycle. Every phase feeds the next, and the last phase feeds back into the first. Objectives become guidelines; guidelines become labeled data; labeled data becomes a dataset your model can actually learn from.</p>
+    </div>
+
+    <div class="phase-rail" id="phase-rail"></div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section id="services">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">What we do</div>
+      <h2>Ten capabilities, one data pipeline.</h2>
+      <p>Each service below is a phase of the lifecycle made permanent — a standing capability we operate for you, not a one-time hand-off.</p>
+    </div>
+    <div class="svc-grid" id="svc-grid"></div>
+  </div>
+</section>
+
+<!-- END-TO-END PIPELINE -->
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Not independent steps</div>
+      <h2>One dataset, flowing through every layer.</h2>
+      <p>A single batch of raw data moves through cleaning, annotation, validation, review and evaluation in one continuous chain before it ever reaches your training pipeline.</p>
+    </div>
+    <div class="chain" id="chain"></div>
+  </div>
+</section>
+
+<!-- WHY IT MATTERS -->
+<section>
+  <div class="wrap">
+    <div class="why-wrap">
+      <div class="why-text">
+        <div class="eyebrow">For anyone new to this</div>
+        <h2>AI learns from examples.</h2>
+        <p>Raw data alone doesn't tell an AI model what's correct. A photo, a sentence or a recording has no built-in meaning to a machine.</p>
+        <p><strong>Annotation adds that meaning</strong> — marking what's in an image, what a sentence intends, or whether a model's answer is good or bad.</p>
+        <p><strong>Quality checks make that meaning consistent</strong>, so the same object, intent or answer is labeled the same way every time.</p>
+        <p>The result is structured, training-ready data that helps an AI model learn faster and perform more reliably.</p>
+      </div>
+      <div class="chain" style="flex-direction:column; align-items:flex-start;" id="why-chain"></div>
+    </div>
+  </div>
+</section>
+
+<!-- DATA TYPES / MULTIMODAL -->
+<section id="modalities">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">One pipeline, every format</div>
+      <h2>Every modality. One data pipeline.</h2>
+      <p>Whatever format your model needs to learn from, we annotate it the same way — with clear guidelines, trained annotators and a quality check before it ships.</p>
+    </div>
+    <div class="svc-grid" id="modality-grid"></div>
+  </div>
+</section>
+
+<!-- AI / GENAI -->
+<section id="genai">
+  <div class="wrap">
+    <div class="feature-panel">
+      <div class="fp-text">
+        <div class="eyebrow">Data for AGI &amp; Generative AI</div>
+        <h2 style="font-size:clamp(24px,3vw,34px); margin:16px 0 4px;">Training data for the next generation of AI.</h2>
+        <p>Modern AI data work isn't limited to drawing boxes around images. Language and generative models need people to judge, rank and correct their outputs — not just label pictures.</p>
+        <p>AI systems need more than large datasets. They need accurate, relevant and human-validated examples that reflect how people actually use AI.</p>
+        <div class="fp-tags" id="genai-tags"></div>
+      </div>
+      <div class="fp-visual">
+        <svg viewBox="0 0 380 300" xmlns="http://www.w3.org/2000/svg">
+          <rect x="20" y="30" width="150" height="60" rx="2" fill="none" stroke="var(--line-bright)" stroke-width="1.5"/>
+          <text x="95" y="56" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="var(--muted)">PROMPT</text>
+          <text x="95" y="74" text-anchor="middle" font-family="IBM Plex Mono" font-size="10" fill="var(--dim)">+ model response</text>
+          <path d="M170 60 H 230" stroke="var(--dim)" stroke-width="1.5" marker-end="url(#arrowg)"/>
+          <rect x="230" y="20" width="130" height="45" rx="2" fill="var(--amber-dim)" stroke="var(--amber)" stroke-width="1.5"/>
+          <text x="295" y="47" text-anchor="middle" font-family="IBM Plex Mono" font-size="10.5" fill="var(--amber)">Preference rank</text>
+          <rect x="230" y="75" width="130" height="45" rx="2" fill="var(--cyan-dim)" stroke="var(--cyan)" stroke-width="1.5"/>
+          <text x="295" y="102" text-anchor="middle" font-family="IBM Plex Mono" font-size="10.5" fill="var(--cyan)">Factuality check</text>
+          <path d="M95 90 V 150" stroke="var(--dim)" stroke-width="1.5" marker-end="url(#arrowg)"/>
+          <rect x="20" y="150" width="150" height="60" rx="2" fill="none" stroke="var(--line-bright)" stroke-width="1.5"/>
+          <text x="95" y="176" text-anchor="middle" font-family="IBM Plex Mono" font-size="11" fill="var(--muted)">HUMAN REVIEW</text>
+          <text x="95" y="194" text-anchor="middle" font-family="IBM Plex Mono" font-size="10" fill="var(--dim)">safety + quality</text>
+          <path d="M95 210 V 250" stroke="var(--dim)" stroke-width="1.5" marker-end="url(#arrowg)"/>
+          <rect x="20" y="250" width="150" height="42" rx="2" fill="var(--violet-dim)" stroke="var(--violet)" stroke-width="1.5"/>
+          <text x="95" y="276" text-anchor="middle" font-family="IBM Plex Mono" font-size="10.5" fill="var(--violet)">Validated example</text>
+          <defs><marker id="arrowg" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="var(--dim)"/></marker></defs>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AUTOMOTIVE -->
+<section id="automotive">
+  <div class="wrap">
+    <div class="feature-panel">
+      <div class="fp-visual">
+        <svg viewBox="0 0 380 260" xmlns="http://www.w3.org/2000/svg">
+          <rect x="16" y="16" width="348" height="228" fill="none" stroke="var(--line)" stroke-width="1"/>
+          <rect x="120" y="150" width="140" height="46" rx="4" fill="none" stroke="var(--amber)" stroke-width="1.6"/>
+          <text x="190" y="178" text-anchor="middle" font-family="IBM Plex Mono" font-size="10" fill="var(--amber)">VEHICLE</text>
+          <rect x="60" y="60" width="46" height="70" rx="3" fill="none" stroke="var(--cyan)" stroke-width="1.6"/>
+          <text x="83" y="100" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" fill="var(--cyan)">PED</text>
+          <rect x="270" y="90" width="60" height="50" rx="3" fill="none" stroke="var(--violet)" stroke-width="1.6"/>
+          <text x="300" y="119" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" fill="var(--violet)">VEHICLE</text>
+          <path d="M20 210 L 130 205 L 250 205 L 360 210" stroke="var(--dim)" stroke-width="1.2" stroke-dasharray="4 4" fill="none"/>
+          <path d="M20 230 L 130 226 L 250 226 L 360 230" stroke="var(--dim)" stroke-width="1.2" stroke-dasharray="4 4" fill="none"/>
+          <g opacity="0.7">
+            <circle cx="90" cy="40" r="1.6" fill="var(--dim)"/><circle cx="150" cy="30" r="1.6" fill="var(--dim)"/>
+            <circle cx="220" cy="36" r="1.6" fill="var(--dim)"/><circle cx="280" cy="50" r="1.6" fill="var(--dim)"/>
+            <circle cx="340" cy="30" r="1.6" fill="var(--dim)"/><circle cx="45" cy="180" r="1.6" fill="var(--dim)"/>
+          </g>
+        </svg>
+      </div>
+      <div class="fp-text">
+        <div class="eyebrow">Data for Automotive AI</div>
+        <h2 style="font-size:clamp(24px,3vw,34px); margin:16px 0 4px;">Annotated visual and sensor data for advanced driver systems.</h2>
+        <p>Automotive AI systems need to recognize roads, vehicles, pedestrians and lane markings before they can support driver assistance and safety features. That starts with carefully annotated 2D and 3D data.</p>
+        <p>We annotate camera, video and LiDAR data so automotive models can be trained and evaluated against real, labeled scenes.</p>
+        <div class="fp-tags" id="auto-tags"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ROBOTICS -->
+<section id="robotics">
+  <div class="wrap">
+    <div class="feature-panel">
+      <div class="fp-text">
+        <div class="eyebrow">Data for Robotics &amp; Physical AI</div>
+        <h2 style="font-size:clamp(24px,3vw,34px); margin:16px 0 4px;">Real-world data for AI systems that act in physical space.</h2>
+        <p>Physical AI — robots, arms and autonomous systems — needs to understand the environment it operates in, not just images on a screen. That means combining visual, spatial and motion data.</p>
+        <p>We label RGB, depth, LiDAR and sensor data so robotics teams can train and evaluate how their systems perceive and interact with the world.</p>
+        <div class="fp-tags" id="robo-tags"></div>
+      </div>
+      <div class="fp-visual">
+        <svg viewBox="0 0 380 260" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="190" cy="130" r="6" fill="var(--amber)"/>
+          <g stroke="var(--line-bright)" stroke-width="1">
+            <line x1="190" y1="130" x2="90" y2="60"/>
+            <line x1="190" y1="130" x2="290" y2="60"/>
+            <line x1="190" y1="130" x2="90" y2="200"/>
+            <line x1="190" y1="130" x2="290" y2="200"/>
+            <line x1="190" y1="130" x2="190" y2="40"/>
+            <line x1="190" y1="130" x2="190" y2="220"/>
+          </g>
+          <g fill="var(--cyan)">
+            <circle cx="90" cy="60" r="4"/><circle cx="290" cy="60" r="4"/>
+            <circle cx="90" cy="200" r="4"/><circle cx="290" cy="200" r="4"/>
+            <circle cx="190" cy="40" r="4"/><circle cx="190" cy="220" r="4"/>
+          </g>
+          <text x="90" y="48" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" fill="var(--muted)">RGB</text>
+          <text x="290" y="48" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" fill="var(--muted)">DEPTH</text>
+          <text x="90" y="220" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" fill="var(--muted)">LIDAR</text>
+          <text x="290" y="220" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" fill="var(--muted)">IMU</text>
+          <text x="190" y="32" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" fill="var(--muted)">FORCE</text>
+          <text x="190" y="238" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" fill="var(--muted)">TORQUE</text>
+        </svg>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QUALITY / HITL -->
+<section id="quality">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Human-in-the-loop</div>
+      <h2>Quality is built into every dataset.</h2>
+      <p>Automation increases speed. Human expertise protects quality. Every dataset moves through review before it's marked ready.</p>
+    </div>
+    <div class="hitl-wrap">
+      <div class="hitl-flow" id="hitl-flow"></div>
+      <div>
+        <p style="color:var(--muted); font-size:15px; line-height:1.75; margin-bottom:20px;">Automated pre-labeling gives annotators a head start, but nothing ships without a person checking it. Depending on the task, that can mean double annotation, reviewer consensus, or targeted sampling across a batch.</p>
+        <div class="fp-tags" id="hitl-tags"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTROL CENTER -->
+<section>
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Always-on visibility</div>
+      <h2>The dataset quality control center.</h2>
+      <p>One view of accuracy, consistency, review status and readiness — with plain-language insight instead of raw label counts. Figures below are illustrative examples of how the dashboard presents a batch, not live customer data.</p>
+    </div>
+
+    <div class="cc-panel">
+      <div class="cc-header">
+        <div class="cc-title">pibi ai data · quality control · example batch</div>
+        <div class="dots"><span></span><span></span><span></span></div>
+      </div>
+      <div class="cc-body">
+        <div class="cc-metrics" id="cc-metrics"></div>
+        <div class="cc-side" id="cc-side"></div>
+      </div>
+      <div class="cc-insights" id="cc-insights"></div>
+    </div>
+    <div class="cc-footnote">Illustrative dashboard — example figures shown for demonstration, not verified customer statistics.</div>
+  </div>
+</section>
+
+<!-- INDUSTRIES -->
+<section id="industries">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Where it's used</div>
+      <h2>Annotated data, applied across industries.</h2>
+      <p>Training-ready data supports AI work across a wide range of domains — wherever a model needs to learn from labeled, validated examples.</p>
+    </div>
+    <div class="svc-grid" id="industries-grid"></div>
+  </div>
+</section>
+
+<!-- TOOLS -->
+<section id="tools">
+  <div class="wrap">
+    <div class="section-head">
+      <div class="eyebrow">Annotation ecosystem</div>
+      <h2>Tools and technologies we work with.</h2>
+      <p>We work across common annotation and data platforms, choosing the right tool for the modality and project rather than forcing every dataset through the same interface.</p>
+    </div>
+    <div class="stack-groups" id="stack-groups"></div>
+    <div class="cc-footnote" style="margin-top:30px;">Shown to illustrate the annotation ecosystem we operate in — not an implied partnership or endorsement.</div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta" id="contact">
+  <div class="wrap">
+    <div class="eyebrow" style="justify-content:center;">From raw data to training-ready datasets</div>
+    <h2>Your AI is only as good as the data behind it.</h2>
+    <p>From raw data to validated training datasets, build the foundation your AI models need to learn, evaluate and improve.</p>
+    <div class="cta-row" style="justify-content:center;">
+      <a href="#" class="btn btn-primary">Talk to Our AI Data Team →</a>
+      <a href="#services" class="btn btn-ghost">Explore Our Services</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot-row">
+    <div class="mono">© 2026 PIBI AI DATA · DATA ANNOTATION / AI TRAINING DATA / DATA VALIDATION / AI EVALUATION</div>
+    <div class="foot-links">
+      <a href="#lifecycle">Data Annotation</a>
+      <a href="#genai">AI Training Data</a>
+      <a href="#quality">Data Validation</a>
+      <a href="#genai">AI Evaluation</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ---------- DATA ----------
+const phases = [
+  {n:'01', t:'Define the Objective', d:'Understand what the AI model needs to learn or evaluate before a single item is labeled.', tag:'Goals · Success criteria'},
+  {n:'02', t:'Prepare the Data', d:'Collect, clean, organize and deduplicate raw data so it is ready for annotation.', tag:'Collection · Cleaning · Dedup'},
+  {n:'03', t:'Define Annotation Guidelines', d:'Create clear labels, categories, rules and edge-case instructions annotators can follow consistently.', tag:'Taxonomy · Edge cases'},
+  {n:'04', t:'Annotate', d:'Trained annotators label the data according to the defined guidelines.', tag:'Boxes · Spans · Transcripts'},
+  {n:'05', t:'Quality Check', d:'Labels are reviewed using validation, sampling, consensus and human review.', tag:'Sampling · Consensus'},
+  {n:'06', t:'AI-Assisted Annotation', d:'Model-assisted pre-labeling speeds up repetitive work, followed by human correction.', tag:'Pre-label · Human correction'},
+  {n:'07', t:'Evaluate', d:'Measure accuracy, consistency and overall dataset quality against the original objective.', tag:'Accuracy · Consistency'},
+  {n:'08', t:'Deliver', d:'Export structured, training-ready datasets in the format your pipeline expects.', tag:'COCO · JSON · Parquet'},
+  {n:'09', t:'Improve', d:'Feedback and evaluation results feed back into guidelines for the next batch.', tag:'Feedback loop'},
+];
+
+const services = [
+  {t:'Data Collection', d:'We source and organize raw images, video, text, audio and documents, ready for the annotation pipeline.', c:'var(--amber)'},
+  {t:'Data Annotation & Labeling', d:'Human annotators apply boxes, polygons, transcripts and entities, guided by clear labeling rules.', c:'var(--cyan)'},
+  {t:'Data Cleaning & Preparation', d:'Deduplication, formatting and organization turn messy raw data into a workable dataset.', c:'var(--violet)'},
+  {t:'Data Validation & Quality Assurance', d:'Every batch is checked for accuracy, consistency and completeness before it moves forward.', c:'var(--amber)'},
+  {t:'Human-in-the-Loop Review', d:'People review AI-assisted and human-labeled data, correcting errors and handling edge cases.', c:'var(--cyan)'},
+  {t:'AI-Assisted Annotation', d:'Model-assisted pre-labeling speeds up annotation, with every prediction checked by a reviewer.', c:'var(--violet)'},
+  {t:'LLM & GenAI Evaluation', d:'Response quality scoring, preference ranking, hallucination detection and safety evaluation.', c:'var(--amber)'},
+  {t:'Multimodal AI Data', d:'Image, video, text, audio and sensor data annotated together for models that span modalities.', c:'var(--cyan)'},
+  {t:'3D / LiDAR Annotation', d:'Point-cloud labeling, 3D cuboids and object tracking for spatial and automotive AI.', c:'var(--violet)'},
+  {t:'Training-Ready Dataset Delivery', d:'Structured, validated datasets exported in the format your training pipeline expects.', c:'var(--amber)'},
+];
+
+const chainSteps = ['Raw Data','Clean','Annotate','Validate','Review','Evaluate','Version','Training Data','AI Model'];
+const whyChainSteps = ['Raw Image','Label','Validated Example','Training Dataset','AI Model'];
+
+const modalities = [
+  {t:'Image', d:'Objects, regions, keypoints and classes — bounding boxes, polygons, masks, keypoints and classification.', c:'var(--amber)'},
+  {t:'Video', d:'Objects, actions, events and tracking — frame labeling, object tracking and event labeling.', c:'var(--cyan)'},
+  {t:'Text', d:'Intent, sentiment, entities and categories — labeled spans and classification.', c:'var(--violet)'},
+  {t:'Audio', d:'Speech, speakers and timestamps — transcription, speaker identification and audio events.', c:'var(--amber)'},
+  {t:'LLM Outputs', d:'Quality, preference, factuality and safety — response evaluation and preference ranking.', c:'var(--cyan)'},
+  {t:'3D / LiDAR', d:'Points, objects and spatial information — 3D cuboids and point-cloud labeling.', c:'var(--violet)'},
+  {t:'Documents', d:'Fields, tables and entities — structured document understanding and relationships.', c:'var(--amber)'},
+  {t:'Sensor Data', d:'Real-world signals and physical interactions — RGB-D, IMU, force and torque data.', c:'var(--cyan)'},
+];
+
+const genaiTags = ['LLM response evaluation','Preference ranking','Human feedback','Instruction-response datasets','Hallucination detection','Factuality evaluation','Safety evaluation','Response quality','Domain-specific evaluation','Agent & workflow evaluation'];
+const autoTags = ['2D image annotation','3D annotation','Object detection','Object tracking','LiDAR / point clouds','Sensor data','Road objects','Vehicles & pedestrians','Lane-related data','Scene understanding'];
+const roboTags = ['RGB data','Depth data','LiDAR','IMU','Force','Torque','Sensor data','Robot–environment interaction'];
+const hitlTags = ['Human review','Double annotation where required','Consensus','Reviewer checks','Edge-case handling','Quality sampling','Validation','Continuous improvement'];
+
+const hitlSteps = [
+  {t:'AI / Automated Pre-Label', d:'var(--dim)'},
+  {t:'Human Review', d:'var(--cyan)'},
+  {t:'Quality Check', d:'var(--violet)'},
+  {t:'Correction', d:'var(--amber)'},
+];
+
+const industries = [
+  {t:'Generative AI', d:'Instruction data, preference pairs and evaluation sets for language and multimodal models.', c:'var(--amber)'},
+  {t:'Computer Vision', d:'Labeled images and video for detection, segmentation and classification tasks.', c:'var(--cyan)'},
+  {t:'Automotive', d:'Annotated visual and sensor data for driver-assistance and perception systems.', c:'var(--violet)'},
+  {t:'Robotics', d:'Multimodal sensor data for robots learning to perceive and act in physical space.', c:'var(--amber)'},
+  {t:'Healthcare', d:'Carefully reviewed data for AI systems that assist with imaging and documentation workflows.', c:'var(--cyan)'},
+  {t:'Retail', d:'Product, catalog and visual data for search, tagging and recommendation systems.', c:'var(--violet)'},
+  {t:'Manufacturing', d:'Visual inspection and sensor data for quality and defect-detection models.', c:'var(--amber)'},
+  {t:'Search & Recommendation', d:'Relevance judgments and labeled interactions for ranking and personalization.', c:'var(--cyan)'},
+  {t:'Conversational AI', d:'Dialogue, intent and response data for chat and voice assistants.', c:'var(--violet)'},
+  {t:'Document AI', d:'Structured field, table and entity annotation for document understanding.', c:'var(--amber)'},
+];
+
+const stackGroups = [
+  {label:'Computer Vision', items:['CVAT','Roboflow','V7']},
+  {label:'Multimodal / AI Data', items:['SuperAnnotate','Dataloop','Label Studio','Labelbox']},
+];
+
+// ---------- RENDER: ticker ----------
+const tickerItems = ['IMAGE','VIDEO','TEXT','AUDIO','DOCUMENTS','3D / LIDAR','LLM OUTPUTS','SENSOR DATA','HUMAN-IN-THE-LOOP','QUALITY ASSURANCE'];
+const tickerHTML = tickerItems.map(t=>`<span><b>${t}</b></span>`).join('');
+document.getElementById('ticker').innerHTML = tickerHTML + tickerHTML;
+
+// ---------- RENDER: phase rail ----------
+const rail = document.getElementById('phase-rail');
+rail.innerHTML = phases.map(p=>`
+  <div class="phase-row">
+    <div class="pn">${p.n}</div>
+    <div><h4>${p.t}</h4></div>
+    <div><div class="pdesc">${p.d}</div><div class="ptag">${p.tag}</div></div>
+  </div>
+`).join('') + `<div class="loop-back"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 3-6.7"/><path d="M3 4v5h5"/></svg> Loops back to Phase 01 — Define the Objective</div>`;
+
+// ---------- RENDER: services ----------
+document.getElementById('svc-grid').innerHTML = services.map((s,i)=>`
+  <div class="svc-card">
+    <div class="svc-dot" style="background:${s.c}; box-shadow:0 0 8px ${s.c};"></div>
+    <div class="svc-num">${String(i+1).padStart(2,'0')}</div>
+    <h3>${s.t}</h3>
+    <p>${s.d}</p>
+  </div>
+`).join('');
+
+// ---------- RENDER: modality grid ----------
+document.getElementById('modality-grid').innerHTML = modalities.map((m,i)=>`
+  <div class="svc-card">
+    <div class="svc-dot" style="background:${m.c}; box-shadow:0 0 8px ${m.c};"></div>
+    <div class="svc-num">${String(i+1).padStart(2,'0')}</div>
+    <h3>${m.t}</h3>
+    <p>${m.d}</p>
+  </div>
+`).join('');
+
+// ---------- RENDER: industries grid ----------
+document.getElementById('industries-grid').innerHTML = industries.map((ind,i)=>`
+  <div class="svc-card">
+    <div class="svc-dot" style="background:${ind.c}; box-shadow:0 0 8px ${ind.c};"></div>
+    <div class="svc-num">${String(i+1).padStart(2,'0')}</div>
+    <h3>${ind.t}</h3>
+    <p>${ind.d}</p>
+  </div>
+`).join('');
+
+// ---------- RENDER: chains ----------
+document.getElementById('chain').innerHTML = chainSteps.map((s,i)=>
+  `<span class="link${i===chainSteps.length-2?' emphasis':''}">${s}</span>` + (i<chainSteps.length-1 ? '<span class="arrow">→</span>' : '')
+).join('');
+
+document.getElementById('why-chain').innerHTML = whyChainSteps.map((s,i)=>
+  `<span class="link${i===whyChainSteps.length-2?' emphasis':''}" style="margin-right:0;">${s}</span>` + (i<whyChainSteps.length-1 ? '<span class="arrow" style="padding:6px 0; display:block;">↓</span>' : '')
+).join('');
+
+// ---------- RENDER: feature tags ----------
+document.getElementById('genai-tags').innerHTML = genaiTags.map(t=>`<span>${t}</span>`).join('');
+document.getElementById('auto-tags').innerHTML = autoTags.map(t=>`<span>${t}</span>`).join('');
+document.getElementById('robo-tags').innerHTML = roboTags.map(t=>`<span>${t}</span>`).join('');
+document.getElementById('hitl-tags').innerHTML = hitlTags.map(t=>`<span>${t}</span>`).join('');
+
+// ---------- RENDER: HITL flow ----------
+let hitlHTML = hitlSteps.map(s=>`
+  <div class="hitl-step"><span class="hs-dot" style="background:${s.d}; box-shadow:0 0 6px ${s.d};"></span>${s.t}</div>
+  <div class="hitl-arrow-down"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 4v14M6 13l6 6 6-6"/></svg></div>
+`).join('');
+hitlHTML += `<div class="hitl-step final"><span class="hs-dot" style="background:var(--amber); box-shadow:0 0 6px var(--amber);"></span>Validated Dataset</div>`;
+document.getElementById('hitl-flow').innerHTML = hitlHTML;
+
+// ---------- RENDER: control center ----------
+const metrics = [
+  {l:'Dataset Quality', v:94, c:'var(--amber)'},
+  {l:'Annotation Consistency', v:96, c:'var(--cyan)'},
+  {l:'Review Completion', v:91, c:'var(--violet)'},
+  {l:'Validation Coverage', v:97, c:'var(--cyan)'},
+  {l:'Data Readiness', v:93, c:'var(--amber)'},
+];
+document.getElementById('cc-metrics').innerHTML = metrics.map(m=>`
+  <div class="metric-row">
+    <div class="metric-top"><span>${m.l}</span><b>${m.v}%</b></div>
+    <div class="bar-track"><div class="bar-fill" data-w="${m.v}" style="background:${m.c};"></div></div>
+  </div>
+`).join('');
+
+const ccStats = [
+  {l:'Items in Current Batch', v:'4,820'},
+  {l:'Annotators Assigned', v:'18'},
+  {l:'Reviewed Today', v:'1,140'},
+  {l:'Edge Cases Flagged', v:'12'},
+  {l:'Duplicate Records Removed', v:'34'},
+  {l:'Datasets Delivered This Week', v:'6'},
+];
+document.getElementById('cc-side').innerHTML = ccStats.map(s=>`<div class="cc-stat"><span>${s.l}</span><b>${s.v}</b></div>`).join('');
+
+const insights = [
+  {ic:'●', c:'var(--amber)', text:'<b>12 edge cases</b> identified during review and routed to senior annotators.'},
+  {ic:'◐', c:'var(--cyan)', text:'<b>Duplicate records</b> detected and removed before delivery.'},
+  {ic:'◐', c:'var(--violet)', text:'Human review required for <b>8%</b> of model-assisted labels.'},
+  {ic:'✓', c:'var(--amber)', text:'<b>Quality threshold</b> passed for the current batch.'},
+];
+document.getElementById('cc-insights').innerHTML = insights.map(i=>`
+  <div class="insight"><span class="ic" style="color:${i.c};">${i.ic}</span><span>${i.text}</span></div>
+`).join('');
+
+// ---------- RENDER: stack ----------
+document.getElementById('stack-groups').innerHTML = stackGroups.map(g=>`
+  <div class="stack-group">
+    <div class="sg-label">${g.label}</div>
+    <div class="sg-items">${g.items.map(i=>`<span>${i}</span>`).join('')}</div>
+  </div>
+`).join('');
+
+// ---------- RENDER: loop nodes (hero) ----------
+const loopNodesEl = document.getElementById('loop-nodes');
+const nodeLabels = ['Collect','Clean','Annotate','Review','Validate','Evaluate','Deliver','Improve'];
+const cx=200, cy=200, r=164, lr=196;
+let nodesSVG = '';
+nodeLabels.forEach((label,i)=>{
+  const angle = (i / nodeLabels.length) * Math.PI * 2 - Math.PI/2;
+  const x = cx + r*Math.cos(angle);
+  const y = cy + r*Math.sin(angle);
+  const lx = cx + lr*Math.cos(angle);
+  const ly = cy + lr*Math.sin(angle);
+  nodesSVG += `<circle class="loop-node" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="4.5"/>`;
+  nodesSVG += `<text class="loop-node-label" x="${lx.toFixed(1)}" y="${ly.toFixed(1)}" text-anchor="middle" dominant-baseline="middle">${label}</text>`;
+});
+loopNodesEl.innerHTML = nodesSVG;
+
+// ---------- Animate bars on scroll ----------
+const obs = new IntersectionObserver((entries)=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.querySelectorAll('.bar-fill').forEach(b=>{ b.style.width = b.dataset.w + '%'; });
+      obs.unobserve(e.target);
+    }
+  });
+},{threshold:0.3});
+document.querySelectorAll('.cc-panel').forEach(el=>obs.observe(el));
+
+// mobile nav toggle (simple show/hide of links as column)
+const toggle = document.querySelector('.nav-toggle');
+const links = document.querySelector('.nav-links');
+toggle.addEventListener('click', ()=>{
+  const open = links.style.display === 'flex';
+  links.style.display = open ? 'none' : 'flex';
+  links.style.cssText += 'position:absolute; top:64px; right:28px; background:#ffffff; flex-direction:column; padding:18px 22px; border:1px solid #dcefe3; border-radius:4px; gap:16px; box-shadow:0 8px 24px rgba(56,189,248,0.15);';
+});
+links.querySelectorAll('a').forEach(a=>a.addEventListener('click', ()=>{
+  if(window.innerWidth<=860){ links.style.display='none'; }
+}));
+</script>
+
+</body>
+</html>
